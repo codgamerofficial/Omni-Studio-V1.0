@@ -1,0 +1,7 @@
+{
+  "name": "Omni Studio AI",
+  "description": "An all-in-one AI-powered creative suite. Generate ATS-friendly resumes, stunning images and videos, get interior design ideas, and create unique clothing designs.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
