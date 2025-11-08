@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { ResumeStudio } from './components/ResumeStudio';
@@ -29,10 +28,12 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-dark-bg font-sans">
+    <div className="flex h-screen bg-transparent font-sans">
       <Sidebar activeStudio={activeStudio} setActiveStudio={setActiveStudio} />
       <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-        {renderStudio()}
+        <div key={activeStudio} className="animate-glitchIn">
+          {renderStudio()}
+        </div>
       </main>
     </div>
   );

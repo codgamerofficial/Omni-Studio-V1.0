@@ -1,4 +1,5 @@
 
+
 import { GoogleGenAI, Modality } from "@google/genai";
 import type { FileWithPreview } from '../types';
 
@@ -32,8 +33,12 @@ export const generateResume = async (formData: any) => {
     const ai = getAiClient();
     const model = 'gemini-2.5-pro';
 
+    const atsScoreInfo = formData.ats_score ? `• Current ATS Score (optional): ${formData.ats_score}` : '';
+    const atsImprovementInstruction = formData.ats_score ? `The user has provided their current ATS score. Your primary goal is to significantly improve this score by optimizing keywords, formatting, and content structure.` : '';
+
+
     const prompt = `
-    System: You are an expert career coach and ATS resume writer. Your job is to convert raw candidate information into (A) an ATS-optimized plain text / applicant-tracking-system friendly resume and (B) a modern visually pleasing human resume breakdown (sections, short bullets). Always produce (A) and (B). Ask only minimal clarifying questions if critical details are missing (job title, years).
+    System: You are an expert career coach and ATS resume writer. Your job is to convert raw candidate information into (A) an ATS-optimized plain text / applicant-tracking-system friendly resume and (B) a modern visually pleasing human resume breakdown (sections, short bullets). Always produce (A) and (B). Ask only minimal clarifying questions if critical details are missing (job title, years). ${atsImprovementInstruction}
 
     User:
     Candidate raw data:
@@ -44,6 +49,7 @@ export const generateResume = async (formData: any) => {
     • Experience bullets / pasted resume: ${formData.raw_resume_text_or_upload}
     • Target job title(s): ${formData.target_titles}
     • Key skills (optional): ${formData.skills_list}
+    ${atsScoreInfo}
 
     Instruction:
     Output "ATS_RESUME:" as plain text (no headers, no special characters like emojis). Keep each section labeled (CONTACT, SUMMARY, SKILLS, EXPERIENCE, EDUCATION, CERTIFICATIONS). Use plain fonts and avoid tables — keep < 2 pages for typical applicants.

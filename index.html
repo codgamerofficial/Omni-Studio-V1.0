@@ -1,23 +1,119 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Omni Studio AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --cyber-cyan: #00f6ff;
+        --cyber-magenta: #ff00ff;
+        --cyber-green: #39ff14;
+        --deep-space: #0a0118;
+        --space-cadet: #1f2041;
+      }
+
+      body {
+        background-color: var(--deep-space);
+        background-image:
+            linear-gradient(var(--cyber-cyan) 1px, transparent 1px),
+            linear-gradient(to right, var(--cyber-cyan) 1px, transparent 1px);
+        background-size: 40px 40px;
+        background-position: 0 0;
+        animation: grid-pan 120s linear infinite;
+        overflow: hidden; /* Hide scrollbars caused by background */
+      }
+      
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(ellipse at center, rgba(10, 1, 24, 0) 0%, var(--deep-space) 70%);
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      @keyframes grid-pan {
+        0% { background-position: 0 0; }
+        100% { background-position: 1200px 1200px; }
+      }
+
+      /* Custom scrollbar for a better thematic fit */
+      ::-webkit-scrollbar {
+          width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+          background: #1e293b;
+      }
+      ::-webkit-scrollbar-thumb {
+          background-color: var(--cyber-cyan);
+          border-radius: 4px;
+          border: 2px solid #1e293b;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: var(--cyber-magenta);
+      }
+      
+    </style>
     <script>
       tailwind.config = {
         theme: {
           extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              display: ['Orbitron', 'sans-serif'],
+            },
             colors: {
-              'brand-primary': '#4f46e5',
-              'brand-secondary': '#7c3aed',
-              'dark-bg': '#111827',
-              'dark-surface': '#1f2937',
-              'dark-border': '#374151',
-              'dark-text-primary': '#f9fafb',
-              'dark-text-secondary': '#d1d5db',
+              'deep-space': '#0a0118',
+              'space-cadet': '#1f2041',
+              'cyber-cyan': 'var(--cyber-cyan)',
+              'cyber-magenta': 'var(--cyber-magenta)',
+              'cyber-green': 'var(--cyber-green)',
+              'light-text': '#e0e0e0',
+              'dark-text': '#a0a0c0',
+            },
+            boxShadow: {
+              'cyber-glow-cyan': '0 0 5px var(--cyber-cyan), 0 0 10px var(--cyber-cyan), 0 0 20px var(--cyber-cyan)',
+              'cyber-glow-magenta': '0 0 5px var(--cyber-magenta), 0 0 10px var(--cyber-magenta), 0 0 20px var(--cyber-magenta)',
+              'cyber-panel': 'inset 0 0 10px rgba(0, 246, 255, 0.2), 0 0 5px rgba(0, 246, 255, 0.3)',
+              'nevel-up': '-2px -2px 5px rgba(255,255,255,0.05), 2px 2px 5px rgba(0,0,0,0.5)',
+              'nevel-down': 'inset -2px -2px 5px rgba(255,255,255,0.05), inset 2px 2px 5px rgba(0,0,0,0.5)',
+            },
+            animation: {
+              glitchIn: 'glitchIn 0.7s ease-out forwards',
+              flicker: 'flicker 3s linear infinite',
+              pulseGlow: 'pulseGlow 2s ease-in-out infinite alternate',
+            },
+            keyframes: {
+              glitchIn: {
+                '0%': { opacity: '0', transform: 'translateY(30px) skewX(-10deg)' },
+                '20%': { opacity: '1', transform: 'translateY(0px) skewX(0deg)' },
+                '22%': { opacity: '1', transform: 'translateX(-2px)' },
+                '24%': { opacity: '1', transform: 'translateX(2px)' },
+                '26%': { transform: 'none' },
+                '60%': { transform: 'none' },
+                '62%': { transform: 'translateY(-1px) scale(1.01)', filter: 'brightness(1.5)' },
+                '64%': { transform: 'none', filter: 'brightness(1)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              flicker: {
+                '0%, 100%': { opacity: 1 },
+                '50.2%': { opacity: 0.7 },
+                '50.5%': { opacity: 1 },
+                '50.9%': { opacity: 0.5 },
+                '51%': { opacity: 1 },
+              },
+              pulseGlow: {
+                'from': { 'box-shadow': '0 0 8px var(--cyber-cyan), 0 0 12px var(--cyber-cyan)' },
+                'to': { 'box-shadow': '0 0 20px var(--cyber-magenta), 0 0 30px var(--cyber-magenta)' },
+              },
             }
           }
         }
@@ -29,12 +125,14 @@
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "jspdf": "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/+esm",
+    "html2canvas": "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/+esm"
   }
 }
 </script>
 </head>
-  <body class="bg-dark-bg text-dark-text-primary">
+  <body class="text-light-text font-sans">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>
